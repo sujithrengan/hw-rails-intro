@@ -13,3 +13,7 @@
  *= require_tree .
  *= require_self
  */
+
+th.hilite {
+    background-color: #ffae42; /* Highlighting sorted column with Yellow-Orange background*/
+} 

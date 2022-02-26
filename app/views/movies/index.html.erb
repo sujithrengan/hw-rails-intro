@@ -6,9 +6,13 @@
 <table class="table table-striped col-md-12" id="movies">
   <thead>
     <tr>
-      <th>Movie Title</th>
+      <th class="<%= ("hilite text-primary" if params[:sort] == "title") %>">
+        <a href="<%= movies_path(:sort => 'title') %>" id="title_header">Movie Title</a>
+      </th>
       <th>Rating</th>
-      <th>Release Date</th>
+      <th class="<%= ("hilite text-primary" if params[:sort] == "release_date") %>">
+        <a href="<%= movies_path(:sort => "release_date") %>" id="title_header">Release Date</a>
+      </th>
       <th>More Info</th>
     </tr>
   </thead>
