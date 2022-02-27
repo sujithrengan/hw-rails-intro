@@ -7,11 +7,43 @@ class MoviesController < ApplicationController
     end
   
     def index
-      @all_ratings = Movie.all.map(&:rating).uniq
+
+      # Initialize session[] hash if empty
+      session[:cache] = {} unless session[:cache]
+
+      # @all_ratings stores all unique ratings from DB
+      @all_ratings = Movie.all_ratings
+
+      # @filter_ratings tracks ratings currently selected to display
       @filter_ratings = params[:ratings] ? params[:ratings].keys : @all_ratings
-      @movies = Movie.with_ratings(@filter_ratings)
-      if params[:sort]
-        @movies = @movies.order(params[:sort])
+
+      # @movies stores the List of Movie Records based on filter and sort
+      @movies = Movie.with_ratings(@filter_ratings).order(params[:sort])
+
+      # redirect with session cache if both params are empty and session cache is not empty
+      if !params[:sort] && !params[:ratings]
+        if session[:cache].size>0
+          redirect_to movies_path(session[:cache])
+        end
+
+      # Update session cache if both params are set
+      elsif params[:sort] && params[:ratings]
+        session[:cache]['sort'] = params[:sort]
+        session[:cache]['ratings'] = params[:ratings]
+
+      # Selectively redirect and update session cache based on param received
+      else
+        if params[:sort]
+          if session[:cache]['ratings']
+            redirect_to movies_path(sort: params[:sort], ratings: session[:cache]['ratings'])
+          end
+          session[:cache]['sort'] = params[:sort]
+        elsif params[:ratings]
+          if session[:cache]['sort']
+            redirect_to movies_path(sort: session[:cache]['sort'], ratings: params[:ratings])
+          end
+          session[:cache]['ratings'] = params[:ratings]
+        end
       end
     end
   
