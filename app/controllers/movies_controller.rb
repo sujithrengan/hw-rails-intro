@@ -7,9 +7,11 @@ class MoviesController < ApplicationController
     end
   
     def index
-      @movies = Movie.all
+      @all_ratings = Movie.all.map(&:rating).uniq
+      @filter_ratings = params[:ratings] ? params[:ratings].keys : @all_ratings
+      @movies = Movie.with_ratings(@filter_ratings)
       if params[:sort]
-        @movies = Movie.order(params[:sort])
+        @movies = @movies.order(params[:sort])
       end
     end
   
