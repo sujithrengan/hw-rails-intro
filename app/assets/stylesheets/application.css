@@ -15,5 +15,9 @@
  */
 
 th.hilite {
-    background-color: #ffae42; /* Highlighting sorted column with Yellow-Orange background*/
+    background-color: #ffae42; /* Highlighting sorted column with Yellow-Orange background */
 } 
+
+th.hilite > a {
+    color: #ffffff; /* Link text when highlighted */
+}
