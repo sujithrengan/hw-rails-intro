@@ -23,6 +23,7 @@ class MoviesController < ApplicationController
       # redirect with session cache if both params are empty and session cache is not empty
       if !params[:sort] && !params[:ratings]
         if session[:cache].size>0
+          flash.keep
           redirect_to movies_path(session[:cache])
         end
 
@@ -35,11 +36,13 @@ class MoviesController < ApplicationController
       else
         if params[:sort]
           if session[:cache]['ratings']
+            flash.keep
             redirect_to movies_path(sort: params[:sort], ratings: session[:cache]['ratings'])
           end
           session[:cache]['sort'] = params[:sort]
         elsif params[:ratings]
           if session[:cache]['sort']
+            flash.keep
             redirect_to movies_path(sort: session[:cache]['sort'], ratings: params[:ratings])
           end
           session[:cache]['ratings'] = params[:ratings]
